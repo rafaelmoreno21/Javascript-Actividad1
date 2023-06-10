@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estadística de pesos</title>
+</head>
+<body>
+    <h1>Estadística de pesos</h1>
+    <p>Ingresa los pesos de los alumnos separados por comas:</p>
+    <input type="text" id="entrada">
+    <button onclick="calcular()">Calcular</button>
+    <div id="resultados"></div>
+
+    <script>
+        function calcular() {
+            let entrada = document.getElementById('entrada').value;
+            let pesos = entrada.split(',').map(peso => parseInt(peso));
+            let resultados = calcularEstadisticaPesos(pesos);
+            mostrarResultados(resultados);
+        }
+
+        function calcularEstadisticaPesos(pesos) {
+            let menosDe40 = 0;
+            let entre40y50 = 0;
+            let entre50y60 = 0;
+            let masDe60 = 0;
+
+            for (let i = 0; i < pesos.length; i++) {
+                if (pesos[i] < 40) {
+                    menosDe40++;
+                } else if (pesos[i] >= 40 && pesos[i] < 50) {
+                    entre40y50++;
+                } else if (pesos[i] >= 50 && pesos[i] < 60) {
+                    entre50y60++;
+                } else {
+                    masDe60++;
+                }
+            }
+
+            return {
+                menosDe40: menosDe40,
+                entre40y50: entre40y50,
+                entre50y60: entre50y60,
+                masDe60: masDe60
+            };
+        }
+
+        function mostrarResultados(resultados) {
+            let divResultados = document.getElementById('resultados');
+            divResultados.innerHTML = `
+                <p>Alumnos con menos de 40kg: ${resultados.menosDe40}</p>
+                <p>Alumnos entre 40kg y 50kg: ${resultados.entre40y50}</p>
+                <p>Alumnos con más de 50kg y menos de 60kg: ${resultados.entre50y60}</p>
+                <p>Alumnos con más o igual a 60kg: ${resultados.masDe60}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
