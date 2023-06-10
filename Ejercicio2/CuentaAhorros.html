@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interés de cuenta de ahorros</title>
+</head>
+<body>
+    <h1>Interes de cuenta de ahorros</h1>
+    <p>Ingresa el monto inicial:</p>
+    <input type="number" id="montoInicial">
+    <button onclick="calcular()">Calcular</button>
+    <div id="resultados"></div>
+
+    <script>
+        function calcular() {
+            let montoInicial = parseFloat(document.getElementById('montoInicial').value);
+            let montoFinal = calcularInteres(montoInicial);
+            mostrarResultados(montoFinal);
+        }
+
+        function calcularInteres(montoInicial) {
+            let interesAnual = 0.15;
+            let interesMensual = interesAnual / 12;
+            let depositoMensual = 250;
+            let meses = 12;
+            let montoFinal = montoInicial;
+
+            for (let i = 0; i < meses; i++) {
+                montoFinal += montoFinal * interesMensual;
+                montoFinal += depositoMensual;
+            }
+
+            return montoFinal;
+        }
+
+        function mostrarResultados(montoFinal) {
+            let divResultados = document.getElementById('resultados');
+            divResultados.innerHTML = `<p>Monto final: ${montoFinal}</p>`;
+        }
+    </script>
+</body>
+</html>
