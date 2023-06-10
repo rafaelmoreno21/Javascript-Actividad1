@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estadísticas de notas</title>
+</head>
+<body>
+    <h1>Estadísticas de notas</h1>
+    <p>Ingresa el número de alumnos:</p>
+    <input type="number" id="numAlumnos">
+    <button onclick="ingresarDatos()">Ingresar datos</button>
+    <div id="resultados"></div>
+
+    <script>
+        let alumnos = [];
+
+        function ingresarDatos() {
+            let numAlumnos = parseInt(document.getElementById('numAlumnos').value);
+            for (let i = 0; i < numAlumnos; i++) {
+                let cedula = prompt('Ingresa la cédula del alumno ' + (i + 1) + ':');
+                let nombre = prompt('Ingresa el nombre del alumno ' + (i + 1) + ':');
+                let notaMatematicas = parseFloat(prompt('Ingresa la nota de matemáticas del alumno ' + (i + 1) + ':'));
+                let notaFisica = parseFloat(prompt('Ingresa la nota de física del alumno ' + (i + 1) + ':'));
+                let notaProgramacion = parseFloat(prompt('Ingresa la nota de programación del alumno ' + (i + 1) + ':'));
+                alumnos.push({
+                    cedula: cedula,
+                    nombre: nombre,
+                    notaMatematicas: notaMatematicas,
+                    notaFisica: notaFisica,
+                    notaProgramacion: notaProgramacion
+                });
+            }
+            calcularEstadisticas();
+        }
+
+        function calcularEstadisticas() {
+            let resultados = {
+                promedioMatematicas: 0,
+                promedioFisica: 0,
+                promedioProgramacion: 0,
+                aprobadosMatematicas: 0,
+                aprobadosFisica: 0,
+                aprobadosProgramacion: 0,
+                aplazadosMatematicas: 0,
+                aplazadosFisica: 0,
+                aplazadosProgramacion: 0,
+                aprobaronTodas: 0,
+                aprobaronUna: 0,
+                aprobaronDos: 0,
+                maximaMatematicas: 0,
+                maximaFisica: 0,
+                maximaProgramacion: 0
+            };
+
+            for (let i = 0; i < alumnos.length; i++) {
+                let alumno = alumnos[i];
+                resultados.promedioMatematicas += alumno.notaMatematicas;
+                resultados.promedioFisica += alumno.notaFisica;
+                resultados.promedioProgramacion += alumno.notaProgramacion;
+                if (alumno.notaMatematicas >= 10) {
+                    resultados.aprobadosMatematicas++;
+                } else {
+                    resultados.aplazadosMatematicas++;
+                }
+                if (alumno.notaFisica >= 10) {
+                    resultados.aprobadosFisica++;
+                } else {
+                    resultados.aplazadosFisica++;
+                }
+                if (alumno.notaProgramacion >= 10) {
+                    resultados.aprobadosProgramacion++;
+                } else {
+                    resultados.aplazadosProgramacion++;
+                }
+                if (alumno.notaMatematicas >= 10 && alumno.notaFisica >= 10 && alumno.notaProgramacion >= 10) {
+                    resultados.aprobaronTodas++;
+                } else if ((alumno.notaMatematicas >= 10 && alumno.notaFisica >= 10) || (alumno.notaMatematicas >= 10 && alumno.notaProgramacion >= 10) || (alumno.notaFisica >= 10 && alumno.notaProgramacion >= 10)) {
+                    resultados.aprobaronDos++;
+                } else if (alumno.notaMatematicas >= 10 || alumno.notaFisica >= 10 || alumno.notaProgramacion >= 10) {
+                    resultados.aprobaronUna++;
+                }
+                if (alumno.notaMatematicas > resultados.maximaMatematicas) {
+                    resultados.maximaMatematicas = alumno.notaMatematicas;
+                }
+                if (alumno.notaFisica > resultados.maximaFisica) {
+                    resultados.maximaFisica = alumno.notaFisica;
+                }
+                if (alumno.notaProgramacion > resultados.maximaProgramacion) {
+                    resultados.maximaProgramacion = alumno.notaProgramacion;
+                }
+            }
+
+            resultados.promedioMatematicas /= alumnos.length;
+            resultados.promedioFisica /= alumnos.length;
+            resultados.promedioProgramacion /= alumnos.length;
+
+            mostrarResultados(resultados);
+        }
+
+        function mostrarResultados(resultados) {
+            let divResultados = document.getElementById('resultados');
+            divResultados.innerHTML = `
+                <h2>Resultados</h2>
+                <p>Promedio de matemáticas: ${resultados.promedioMatematicas}</p>
+                <p>Promedio de física: ${resultados.promedioFisica}</p>
+                <p>Promedio de programación: ${resultados.promedioProgramacion}</p>
+                <p>Número de alumnos aprobados en matemáticas: ${resultados.aprobadosMatematicas}</p>
+                <p>Número de alumnos aprobados en física: ${resultados.aprobadosFisica}</p>
+                <p>Número de alumnos aprobados en programación: ${resultados.aprobadosProgramacion}</p>
+                <p>Número de alumnos aplazados en matemáticas: ${resultados.aplazadosMatematicas}</p>
+                <p>Número de alumnos aplazados en física: ${resultados.aplazadosFisica}</p>
+                <p>Número de alumnos aplazados en programación: ${resultados.aplazadosProgramacion}</p>
+                <p>Número de alumnos que aprobaron todas las materias: ${resultados.aprobaronTodas}</p>
+                <p>Número de alumnos que aprobaron una sola materia: ${resultados.aprobaronUna}</p>
+                <p>Número de alumnos que aprobaron dos materias: ${resultados.aprobaronDos}</p>
+                <p>Nota máxima en matemáticas: ${resultados.maximaMatematicas}</p>
+                <p>Nota máxima en física: ${resultados.maximaFisica}</p>
+                <p>Nota máxima en programación: ${resultados.maximaProgramacion}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
